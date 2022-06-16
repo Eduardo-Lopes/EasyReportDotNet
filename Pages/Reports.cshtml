@@ -1,0 +1,21 @@
+@page "{handler?}"
+@model NorthWind.Pages.Reports.IndexModel
+
+@{
+    ViewData["Title"] = Model.ReportName;
+}
+
+<h1>@Html.DisplayFor(model => model.ReportName)</h1>
+
+@if (HttpContext.Request.Query.ContainsKey("hide-menu")){
+<style>
+    table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+    }
+</style>
+}
+
+<table class="datatable" sytle="border: 1px solid black">
+    @await Html.PartialAsync("_DataTable",Model.Result)
+</table>

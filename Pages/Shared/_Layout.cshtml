@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - NorthWind</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="~/css/buttons.dataTables.min.css"/>
 </head>
 <body>
     <header>
@@ -44,7 +46,48 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script type="text/javascript" src="~/js/jszip.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables-1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="~/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="~/js/buttons.print.min.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/jquery-ui-i18n.min.js"></script>
+<script>
+        $(document).ready( function () {
+            $('table.datatable').DataTable({
+                language:{url:"@Url.Content("~/js/pt_br.json")"},
+                dom: 'Bfrtip',
+                buttons: ['excel']
+            });
+            /*
+            $.datepicker.setDefaults(
+                $.extend(
+                    {'dateFormat':'dd-mm-yy'},
+                    $.datepicker.regional['pt-BR']
+                )
+            );
+            $('.date-picker').MonthPicker({ 
+                Button: false,
+                MinMonth: '-2y',
+                MaxMonth: '+2y',
+                i18n: {
+                    year: 'Ano',
+                    prevYear: 'Ano Anterior',
+                    nextYear: 'Próximo Ano',
+                    next12Years: 'Avançar 12 Anos',
+                    prev12Years: 'Voltar 12 Anos',
+                    nextLabel: 'Próximo',
+                    prevLabel: 'Anterior',
+                    buttonText: 'Abrir',
+                    jumpYears: 'Pular Anos',
+                    backTo: 'Voltar para',
+                    months: ['Jan.', 'Fev.', 'Mar.', 'Abr.', 'Mai', 'Jun.', 'Jul.', 'Ago.', 'Set.', 'Out.', 'Nov.', 'Dez.']
+                }
+            });
+            */
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

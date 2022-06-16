@@ -1,0 +1,34 @@
+@using System.Reflection
+@model IList<object>
+@{
+    var ModelData = Model;
+    if (ModelData.Count != 0) {
+        Type t = ModelData[0].GetType();
+        PropertyInfo[] pi = t.GetProperties(); 
+
+        <thead>
+            @foreach(var prop in pi) {
+                <th>@prop.Name</th>
+            }
+        </thead>
+
+        <tbody>
+        @foreach (var item in ModelData)
+        {   
+            <tr>
+            @{
+                @for (int i = 0; i < pi.Length; i++) {
+                    var prop = pi[i];
+                    var value = prop.GetValue(item);
+                    <td>
+                    @if (value != null) {
+                        @value.ToString()
+                    }
+                    </td>
+                }
+            }
+            </tr>
+        }
+        </tbody>
+    }
+}
