@@ -1,25 +1,42 @@
 @using System.Reflection
+@using System.Collections.Generic
 @model IList<object>
 @{
     var ModelData = Model;
     if (ModelData.Count != 0) {
-        Type t = ModelData[0].GetType();
-        PropertyInfo[] pi = t.GetProperties(); 
+        
+
+        IEnumerable<String> columnTitles;
+        Func<object,IEnumerable<object>> getRowValues;
+
+        if (ModelData[0] is IReadOnlyDictionary<string,object>)
+        {
+            columnTitles = ((IReadOnlyDictionary<string,object>) ModelData[0]).Keys;
+            getRowValues = (row) => {
+                var rowTyped = (IReadOnlyDictionary<string,object>)row;
+                return columnTitles.Select((title) => rowTyped[title]);
+            };
+        }
+        else
+        {
+            Type t = ModelData[0].GetType();
+            var props = t.GetProperties();
+            columnTitles = props.Select((prop)=>prop.Name);
+            getRowValues = (row) => props.Select(prop=>prop.GetValue(row));
+        }
 
         <thead>
-            @foreach(var prop in pi) {
-                <th>@prop.Name</th>
+            @foreach(var columnTitle in columnTitles) {
+                <th>@columnTitle</th>
             }
         </thead>
 
         <tbody>
         @foreach (var item in ModelData)
-        {   
+        {
             <tr>
             @{
-                @for (int i = 0; i < pi.Length; i++) {
-                    var prop = pi[i];
-                    var value = prop.GetValue(item);
+                @foreach(var value in getRowValues(item)) {
                     <td>
                     @if (value != null) {
                         @value.ToString()
